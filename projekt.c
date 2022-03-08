@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 
 void help(){
@@ -20,10 +21,99 @@ void help(){
     printf("\n***********************\n");
 }
 
+void v( int *file_read, int *arrays_allocated){
+    if(*file_read){
+        printf("Subor uz bol otvoreny!\n");
+        if(*arrays_allocated){
+            printf("Polia už boli alokované!");
+        } else{
+            printf("Citam zo suboru!\n\n");
+            FILE *fr;
+            if((fr = fopen("OrganizacnePodujatia.txt", "r")) == NULL){
+                printf("Neotvoreny subor\n");
+                return 0;
+            }
+
+            *file_read = 1;
+
+            char row[256];
+            char *segment;
+
+            int counter = 0;
+
+            while(feof(fr) == 0){
+                fgets(row, 256,fr);
+
+                if(counter == 5){
+                    counter = 0;
+                    printf("\n");
+                }
+
+                segment = strtok(row, "#");
+                switch(counter){
+                        case 0:
+                            printf("Nazov prispevku: ");
+                            break;
+                        case 1:
+                            printf("Mena autorov: ");
+                            break;
+                        case 2:
+                            printf("Typ prezentovania: ");
+                            break;
+                        case 3:
+                            printf("Cas prezentovania: ");
+                            break;
+                        case 4:
+                            printf("Datum: ");
+                            break;
+                        default:
+                            break;
+                    }
+                while(segment != NULL){
+                    
+                    printf("%s ", segment);
+
+                    segment = strtok(NULL, "#");
+                }
+
+                counter++;
+            }
+
+            if(fclose(fr) == EOF) printf("Subor sa nepodarilo zatvorit\n");
+        }
+
+    } else{
+        FILE *fr;
+        if((fr = fopen("OrganizacnePodujatia.txt", "r")) == NULL){
+            printf("Neotvoreny subor\n");
+            return 0;
+        }
+        *file_read = 1;
+
+        if(fclose(fr) == EOF) printf("Subor sa nepodarilo zatvorit\n");
+    }
+
+}
+
+
 int main(){
 
-    //? Menu
+    //! VARIABLES
     char opt;
+    int file_read = 0;
+    int arrays_allocated = 0;
+
+
+    //! POINTERS
+    int *point_file_read = &file_read;
+    int *point_arrays_allocated = &arrays_allocated;
+
+
+
+
+
+
+    //? Menu
     printf(">: ");
     while(scanf("%c", &opt) < 1){
         printf("Neplatny vstup!\n");
@@ -35,6 +125,7 @@ int main(){
         switch (opt){
             case 'v':
                 printf("Funkcia V\n");
+                v(point_file_read, point_arrays_allocated);
                 break;
             case 'o':
                 printf("Funkcia O\n");
@@ -68,13 +159,13 @@ int main(){
 
 
         printf("\n>: ");
-        while(scanf("%c", &opt) < 1){
+        while(scanf(" %c", &opt) < 1){
             printf("Neplatny vstup!");
             while(getchar() != '\n');
         }
         while(getchar() != '\n');
     }
-
+    printf("See you later, alligator!");
 
 
     return 0;
