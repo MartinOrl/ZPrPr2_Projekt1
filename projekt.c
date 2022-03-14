@@ -21,22 +21,25 @@ void help(){
     printf("\n***********************\n");
 }
 
-void v( int *file_read, int *arrays_allocated, FILE **fr){
-    if(*file_read){
+void v( int *point_file_read, int *point_arrays_allocated,char *nazvyPrispevkov[], char *menaAutorov, char *typyPrezentovania, int *casyPrezentovania, int *datumy, FILE **fr ){
+    if(*point_file_read){
         printf("Subor uz bol otvoreny!\n");
-        if(*arrays_allocated){
-            printf("Polia už boli alokované!");
+        if(*point_arrays_allocated){
+            printf("Polia uz boli alokovane!");
+            char test[64];
+            strcpy(test, nazvyPrispevkov[0]);
+            printf("%s\n", nazvyPrispevkov[0]);
+            return;
         } else{
             printf("Citam zo suboru!\n\n");
             fseek(*fr, 0, SEEK_SET);
 
-            *file_read = 1;
+            *point_file_read = 1;
 
             char row[256];
             char *segment;
 
             int counter = 0;
-            int length = 0;
 
             while(feof(*fr) == 0){
                 fgets(row, 256,*fr);
@@ -67,7 +70,6 @@ void v( int *file_read, int *arrays_allocated, FILE **fr){
                 }
                 segment = strtok(row, "#");
                 while(segment != NULL){
-                    length = strlen(segment);
                     printf("%s", segment);
                     segment = strtok(NULL, "#");
                 }
@@ -81,13 +83,13 @@ void v( int *file_read, int *arrays_allocated, FILE **fr){
             printf("Neotvoreny subor\n");
             return;
         }
-        *file_read = 1;
+        *point_file_read = 1;
     }
     return;
 
 }
 
-void n( int *point_file_read, int *point_arrays_allocated,char *nazvyPrispevkov, char *menaAutorov, char *typyPrezentovania, int *casyPrezentovania, int *datumy, FILE **fr ){
+void n( int *point_file_read, int *point_arrays_allocated,char **nazvyPrispevkov, char *menaAutorov, char *typyPrezentovania, int *casyPrezentovania, int *datumy, FILE **fr ){
     if(! *point_file_read){
         printf("Neotvoreny subor");
         return;
@@ -110,24 +112,54 @@ void n( int *point_file_read, int *point_arrays_allocated,char *nazvyPrispevkov,
         }
         if(c == '\n'){
             rowCount++;
-        }
+        }   
     }
 
+    
+
+    int groupCount = rowCount / 6;
+    int i = 0;
+    // int j = 0;
     fseek(*fr, 0, SEEK_SET);
+    *nazvyPrispevkov = (char*) malloc(sizeof(char *) * groupCount);
+    for(i = 0; i < groupCount; i++){
+        printf("Allocating array %d\n", i);
+        nazvyPrispevkov[i] = (char *) malloc(64 *sizeof(char));
+    }
+    char test[] = {"AAAA"};
+    strcpy(nazvyPrispevkov[0], test);
+    // printf("BBBBB\n");
 
-    printf("%d ", rowCount);
 
+    // i = 0;
+    // printf("AAAAAA\n");
+    // char a;
+    // while(2){
+    //     printf("CCCCCC\n");
+    //     a = fgetc(*fr);
+    //     printf("USSR\n");
+    //     if(a == EOF){
+    //         rowCount++;
+    //         break;
+    //     }
+    //     if(a == '\n'){
+    //         rowCount++;
+    //     }   
+    // }
+    // printf("%d", rowCount);
+    
+    *point_arrays_allocated = 1;
 
 
     return;
 }
 
 void k( int *point_file_read, int *point_arrays_allocated,char *nazvyPrispevkov, char *menaAutorov, char *typyPrezentovania, int *casyPrezentovania, int *datumy, FILE **fr ){
-    if(*point_file_read){
-        if(fclose(fr) == NULL){
-            printf("Súbor sa nezatvoril");
-        }
-    }
+    // if(*point_file_read){
+    //     if(fclose(*fr) == NULL){
+    //         printf("Súbor sa nezatvoril");
+    //     }
+    // }
     if(*point_arrays_allocated){
         free(nazvyPrispevkov);
         free(menaAutorov);
@@ -147,6 +179,9 @@ int main(){
     int file_read = 0;
     int arrays_allocated = 0;
 
+    int dummy  = 15;
+    char dummy_c = 'a';
+
 
     //! POINTERS
     int *point_file_read = &file_read;
@@ -154,11 +189,11 @@ int main(){
     FILE *fr;
 
     //! POLIA
-    char *nazvyPrispevkov;
-    char *menaAutorov;
-    char *typyPrezentovania;
-    int *casyPrezentovania;
-    int *datumy;
+    char **nazvyPrispevkov;
+    char *menaAutorov = &dummy_c;
+    char *typyPrezentovania = &dummy_c;
+    int *casyPrezentovania = &dummy;
+    int *datumy = &dummy;
 
 
 
@@ -176,13 +211,13 @@ int main(){
 
         switch (opt){
             case 'v':
-                v(point_file_read, point_arrays_allocated, &fr);
+                v(point_file_read, point_arrays_allocated, &nazvyPrispevkov, menaAutorov, typyPrezentovania, casyPrezentovania, datumy, &fr);
                 break;
             case 'o':
                 printf("Funkcia O\n");
                 break;
             case 'n':
-                n(point_file_read, point_arrays_allocated, nazvyPrispevkov, menaAutorov, typyPrezentovania, casyPrezentovania, datumy, &fr);
+                n(point_file_read, point_arrays_allocated, &nazvyPrispevkov, menaAutorov, typyPrezentovania, casyPrezentovania, datumy, &fr);
                 break;
             case 's':
                 printf("Funkcia S\n");
@@ -197,7 +232,7 @@ int main(){
                 printf("Funkcia P\n");
                 break;
             case 'k':
-                k(point_file_read, point_arrays_allocated, nazvyPrispevkov, menaAutorov, typyPrezentovania, casyPrezentovania, datumy, &fr);
+                // k(point_file_read, point_arrays_allocated, nazvyPrispevkov, menaAutorov, typyPrezentovania, casyPrezentovania, datumy, &fr);
                 break;
             case 'l':
                 help();
@@ -215,6 +250,10 @@ int main(){
             while(getchar() != '\n');
         }
         while(getchar() != '\n');
+    }
+    if(arrays_allocated){
+        free(nazvyPrispevkov);
+  
     }
     printf("See you later, alligator!");
 
