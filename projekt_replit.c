@@ -230,23 +230,23 @@ void n( int *point_file_read, int *point_arrays_allocated,char ***nazvyPrispevko
     return;
 }
 
-void p(int *point_file_read, int *point_arrays_allocated,char ***nazvyPrispevkov, char ***menaAutorov, char ***typyPrezentovania, char ***casyPrezentovania, char ***datumy, int *pointer_special_alloc){
+void p(int *point_arrays_allocated,char ***nazvyPrispevkov, char ***menaAutorov, char ***typyPrezentovania, char ***casyPrezentovania, char ***datumy, int *pointer_special_alloc){
     
-    char nazov[128];
+    char nazov[64];
     char meno[64];
     char typ[64];
     char cas[64];
     char datum[64];
     
-    scanf("%[^\n]s", &nazov);
+    scanf("%[^\n]s", nazov);
     while(getchar() != '\n');
-    scanf("%[^\n]s", &meno);
+    scanf("%[^\n]s", meno);
     while(getchar() != '\n');
-    scanf("%[^\n]s", &typ);
+    scanf("%[^\n]s", typ);
     while(getchar() != '\n');
-    scanf("%[^\n]s", &cas);
+    scanf("%[^\n]s", cas);
     while(getchar() != '\n');
-    scanf("%[^\n]s", &datum);
+    scanf("%[^\n]s", datum);
     while(getchar() != '\n');
     
     // Starts checking inputs for correct specifications and allocated arrays existence
@@ -304,7 +304,6 @@ void o(int *point_file_read, int *point_arrays_allocated,char ***nazvyPrispevkov
 
     int datum = 0;
     int helper = 0;
-    int posHelper = 0;
     int pos_switch_helper = 0;
     int pos_switch_temp = 0;
     int match_found = 0;
@@ -532,7 +531,7 @@ void o(int *point_file_read, int *point_arrays_allocated,char ***nazvyPrispevkov
     return;
 }
 
-void h(int *point_file_read, int *point_arrays_allocated,char ***nazvyPrispevkov, char ***menaAutorov, char ***typyPrezentovania, char ***casyPrezentovania, char ***datumy){
+void h(int *point_arrays_allocated,char ***typyPrezentovania, char ***casyPrezentovania){
     if(*point_arrays_allocated == 0){
         printf("Polia nie su vytvorene\n");
         return;
@@ -574,7 +573,7 @@ void h(int *point_file_read, int *point_arrays_allocated,char ***nazvyPrispevkov
     return;
 }
 
-void s(int *point_file_read, int *point_arrays_allocated,char ***nazvyPrispevkov, char ***menaAutorov, char ***typyPrezentovania, char ***casyPrezentovania, char ***datumy){
+void s(int *point_arrays_allocated,char ***nazvyPrispevkov, char ***menaAutorov, char ***typyPrezentovania, char ***casyPrezentovania, char ***datumy){
     if(!*point_arrays_allocated){
         printf("Polia nie su vytvorene!\n");
         return;
@@ -584,7 +583,7 @@ void s(int *point_file_read, int *point_arrays_allocated,char ***nazvyPrispevkov
     int helper = 0;
     int found = 0;
     scanf("%d", &datum);
-    scanf("%s", &typ);
+    scanf("%3s", typ);
     // Loops through allocated arrays to look for match at date and type of presentation, if match found, it prints it to the console
     for(int i = 0; i < *point_arrays_allocated; i++){
         helper = (int) atoi((*datumy)[i]);
@@ -601,13 +600,13 @@ void s(int *point_file_read, int *point_arrays_allocated,char ***nazvyPrispevkov
 
 }
 
-void z(int *point_file_read, int *point_arrays_allocated,char ***nazvyPrispevkov, char ***menaAutorov, char ***typyPrezentovania, char ***casyPrezentovania, char ***datumy, int *pointer_special_alloc){
+void z(int *point_arrays_allocated,char ***nazvyPrispevkov, char ***menaAutorov, char ***typyPrezentovania, char ***casyPrezentovania, char ***datumy, int *pointer_special_alloc){
     if(! *point_arrays_allocated){
         printf("Polia nie su vytvorene!\n");
         return;
     }
     char nazov_target[256];
-    scanf("%[^\n]s", &nazov_target);
+    scanf("%[^\n]s", nazov_target);
     int erased_count = 0;
     int *indexes;
     // Allocates memory for index array of records that need to be erased
@@ -716,16 +715,16 @@ int main(){
                 n(point_file_read, point_arrays_allocated, &nazvyPrispevkov, &menaAutorov, &typyPrezentovania, &casyPrezentovania, &datumy, &fr);
                 break;
             case 's':
-                s(point_file_read, point_arrays_allocated, &nazvyPrispevkov, &menaAutorov, &typyPrezentovania, &casyPrezentovania, &datumy);
+                s(point_arrays_allocated, &nazvyPrispevkov, &menaAutorov, &typyPrezentovania, &casyPrezentovania, &datumy);
                 break;
             case 'h':
-                h(point_file_read, point_arrays_allocated, &nazvyPrispevkov, &menaAutorov, &typyPrezentovania, &casyPrezentovania, &datumy);
+                h(point_arrays_allocated,&typyPrezentovania, &casyPrezentovania);
                 break;
             case 'z':
-                z(point_file_read, point_arrays_allocated, &nazvyPrispevkov, &menaAutorov, &typyPrezentovania, &casyPrezentovania, &datumy, pointer_special_alloc);
+                z(point_arrays_allocated, &nazvyPrispevkov, &menaAutorov, &typyPrezentovania, &casyPrezentovania, &datumy, pointer_special_alloc);
                 break;
             case 'p':
-                p(point_file_read, point_arrays_allocated, &nazvyPrispevkov, &menaAutorov, &typyPrezentovania, &casyPrezentovania, &datumy, pointer_special_alloc);
+                p(point_arrays_allocated, &nazvyPrispevkov, &menaAutorov, &typyPrezentovania, &casyPrezentovania, &datumy, pointer_special_alloc);
                 break;
             case 'k':
                 if(arrays_allocated){
@@ -751,7 +750,7 @@ int main(){
                     }
                     fr = NULL;
                 }
-                return;
+                return 0;
 
             case 'l':
                 help();
