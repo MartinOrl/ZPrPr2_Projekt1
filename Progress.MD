@@ -1,15 +1,15 @@
 # Projekt č. 1 – Práca s dynamickým poľom
 - [x] Menu
-- [ ] funkcia v
+- [x] funkcia v
     - [x] otvaranie súboru
     - [x] subor už bol otvorený
-    - [ ] kontrola vytvorenia dynamických polí
+    - [x] kontrola vytvorenia dynamických polí
         - ak existujú, vypíš údaje polí, inak zo súboru
-- [ ] funkcia o
-    - [ ] načítanie dátumu
-- [ ] funkcia n
-- [ ] funkcia s
-- [ ] funkcia h
-- [ ] funkcia z
-- [ ] funkcia p
-- [ ] funkcia k
+- [x] funkcia o
+    - [x] načítanie dátumu
+- [x] funkcia n
+- [x] funkcia s
+- [x] funkcia h
+- [x] funkcia z
+- [x] funkcia p
+- [x] funkcia k
